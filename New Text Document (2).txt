@@ -1,0 +1,687 @@
+import pandas as pd
+from pandas import Series,DataFrame
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+sns.set_style('whitegrid')
+%matplotlib inline
+import requests
+from StringIO import StringIO
+url='http://elections.huffingtonpost.com/pollster/2012-general-election-romney-vs-obama.csv'
+source=requests.get(url).text
+polldata=StringIO(source)
+polldf=pd.read_csv(polldata)
+polldf
+Pollster	Start Date	End Date	Entry Date/Time (ET)	Number of Observations	Population	Mode	Obama	Romney	Undecided	Other	Pollster URL	Source URL	Partisan	Affiliation	Question Text	Question Iteration
+0	Politico/GWU/Battleground	2012-11-04	2012-11-05	2012-11-06T08:40:26Z	1000.0	Likely Voters	Live Phone	47.0	47.0	6.0	NaN	https://elections.huffingtonpost.com/pollster/...	http://www.politico.com/news/stories/1112/8338...	Nonpartisan	None	NaN	1
+1	YouGov/Economist	2012-11-03	2012-11-05	2012-11-26T15:31:23Z	740.0	Likely Voters	Internet	49.0	47.0	3.0	NaN	https://elections.huffingtonpost.com/pollster/...	http://cdn.yougov.com/cumulus_uploads/document...	Nonpartisan	None	NaN	1
+2	Gravis Marketing	2012-11-03	2012-11-05	2012-11-06T09:22:02Z	872.0	Likely Voters	Automated Phone	48.0	48.0	4.0	NaN	https://elections.huffingtonpost.com/pollster/...	http://www.gravispolls.com/2012/11/gravis-mark...	Nonpartisan	None	NaN	1
+3	IBD/TIPP	2012-11-03	2012-11-05	2012-11-06T08:51:48Z	712.0	Likely Voters	Live Phone	50.0	49.0	NaN	1.0	https://elections.huffingtonpost.com/pollster/...	http://news.investors.com/special-report/50841...	Nonpartisan	None	NaN	1
+4	Rasmussen	2012-11-03	2012-11-05	2012-11-06T08:47:50Z	1500.0	Likely Voters	Automated Phone	48.0	49.0	NaN	NaN	https://elections.huffingtonpost.com/pollster/...	http://www.rasmussenreports.com/public_content...	Nonpartisan	None	NaN	1
+5	JZ Analytics/Newsmax	2012-11-03	2012-11-05	2012-11-06T07:38:41Z	1041.0	Likely Voters	Internet	47.0	47.0	6.0	NaN	https://elections.huffingtonpost.com/pollster/...	http://www.jzanalytics.com/	Sponsor	Rep	NaN	1
+6	UPI/CVOTER	2012-11-03	2012-11-05	2012-11-05T18:30:15Z	3000.0	Likely Voters	Live Phone	49.0	48.0	NaN	NaN	https://elections.huffingtonpost.com/pollster/...	NaN	Nonpartisan	None	NaN	1
+7	Ipsos/Reuters (Web)	2012-11-01	2012-11-05	2012-11-05T16:12:48Z	4725.0	Likely Voters	Internet	48.0	46.0	4.0	2.0	https://elections.huffingtonpost.com/pollster/...	http://big.assets.huffingtonpost.com/ipsos1105...	Nonpartisan	None	NaN	1
+8	ARG	2012-11-02	2012-11-04	2012-11-05T13:06:54Z	1200.0	Likely Voters	Live Phone	49.0	49.0	1.0	1.0	https://elections.huffingtonpost.com/pollster/...	http://americanresearchgroup.com/pres2012/NA12...	Nonpartisan	None	NaN	1
+9	PPP (D-Americans United for Change)	2012-11-02	2012-11-04	2012-11-04T22:32:19Z	1200.0	Likely Voters	Automated Phone	50.0	48.0	3.0	NaN	https://elections.huffingtonpost.com/pollster/...	http://www.publicpolicypolling.com/pdf/2011/PP...	Sponsor	Dem	NaN	1
+10	CNN	2012-11-02	2012-11-04	2012-11-04T20:16:09Z	693.0	Likely Voters	Live Phone	49.0	49.0	2.0	NaN	https://elections.huffingtonpost.com/pollster/...	http://i2.cdn.turner.com/cnn/2012/images/11/04...	Nonpartisan	None	NaN	1
+11	ABC/Post	2012-11-01	2012-11-04	2012-11-05T16:56:22Z	2345.0	Likely Voters	Live Phone	50.0	47.0	1.0	1.0	https://elections.huffingtonpost.com/pollster/...	http://www.washingtonpost.com/blogs/the-fix/wp...	Nonpartisan	None	NaN	1
+12	Gallup	2012-11-01	2012-11-04	2012-11-05T13:48:29Z	2551.0	Likely Voters	Live Phone	48.0	49.0	NaN	NaN	https://elections.huffingtonpost.com/pollster/...	http://www.gallup.com/poll/157817/election-201...	Nonpartisan	None	NaN	1
+13	DailyKos/SEIU/PPP (D)	2012-11-01	2012-11-04	2012-11-05T13:31:31Z	1300.0	Likely Voters	Automated Phone	50.0	48.0	2.0	NaN	https://elections.huffingtonpost.com/pollster/...	http://www.dailykos.com/weeklypolling/2012/11/1	Sponsor	Dem	NaN	1
+14	Monmouth	2012-11-01	2012-11-04	2012-11-05T12:52:03Z	1417.0	Likely Voters	IVR/Live Phone	48.0	48.0	2.0	2.0	https://elections.huffingtonpost.com/pollster/...	http://cms.monmouth.edu/assets/0/84/159/214748...	Nonpartisan	None	NaN	1
+15	Democracy Corps (D)	2012-11-01	2012-11-04	2012-11-05T09:41:50Z	1080.0	Likely Voters	Live Phone	49.0	45.0	NaN	1.0	https://elections.huffingtonpost.com/pollster/...	http://big.assets.huffingtonpost.com/demcorpst...	Pollster	Dem	NaN	1
+16	Angus-Reid	2012-11-01	2012-11-03	2012-11-06T08:47:46Z	1019.0	Likely Voters	Internet	51.0	48.0	NaN	1.0	https://elections.huffingtonpost.com/pollster/...	http://www.angus-reid.com/polls/47681/obama-ho...	Nonpartisan	None	NaN	1
+17	NBC/WSJ	2012-11-01	2012-11-03	2012-11-04T09:12:21Z	1475.0	Likely Voters	Live Phone	48.0	47.0	3.0	2.0	https://elections.huffingtonpost.com/pollster/...	http://firstread.nbcnews.com/_news/2012/11/04/...	Nonpartisan	None	NaN	1
+18	YouGov	2012-10-31	2012-11-03	2012-11-04T16:24:50Z	36472.0	Likely Voters	Internet	49.0	47.0	3.0	NaN	https://elections.huffingtonpost.com/pollster/...	http://cdn.yougov.com/r/1/ygTabs_november_like...	Nonpartisan	None	NaN	1
+19	Pew	2012-10-31	2012-11-03	2012-11-04T15:46:59Z	2709.0	Likely Voters	Live Phone	48.0	45.0	NaN	3.0	https://elections.huffingtonpost.com/pollster/...	http://www.people-press.org/2012/11/04/obama-g...	Nonpartisan	None	NaN	1
+20	UPI/CVOTER	2012-11-02	2012-11-02	2012-11-03T16:40:44Z	1074.0	Likely Voters	Live Phone	49.0	48.0	NaN	NaN	https://elections.huffingtonpost.com/pollster/...	NaN	Nonpartisan	None	NaN	1
+21	Rasmussen	2012-10-31	2012-11-02	2012-11-03T10:54:09Z	1500.0	Likely Voters	Automated Phone	48.0	48.0	2.0	1.0	https://elections.huffingtonpost.com/pollster/...	http://www.rasmussenreports.com/public_content...	Nonpartisan	None	NaN	1
+22	Purple Strategies	2012-10-31	2012-11-01	2012-11-02T12:31:41Z	1000.0	Likely Voters	IVR/Online	47.0	46.0	7.0	NaN	https://elections.huffingtonpost.com/pollster/...	http://www.purplestrategies.com/wp-content/upl...	Nonpartisan	None	NaN	1
+23	JZ Analytics/Newsmax	2012-10-30	2012-11-01	2012-11-02T22:57:27Z	1030.0	Likely Voters	Internet	48.0	46.0	6.0	NaN	https://elections.huffingtonpost.com/pollster/...	http://www.jzanalytics.com/	Sponsor	Rep	NaN	1
+24	PPP (D-Americans United for Change)	2012-10-30	2012-11-01	2012-11-02T05:46:11Z	1200.0	Likely Voters	Automated Phone	49.0	48.0	3.0	NaN	https://elections.huffingtonpost.com/pollster/...	http://www.publicpolicypolling.com/pdf/2011/PP...	Sponsor	Dem	NaN	1
+25	Politico/GWU/Battleground	2012-10-29	2012-11-01	2012-11-04T08:42:53Z	1000.0	Likely Voters	Live Phone	48.0	48.0	3.0	NaN	https://elections.huffingtonpost.com/pollster/...	https://mediarelations.gwu.edu/sites/mediarela...	Nonpartisan	None	NaN	1
+26	UPI/CVOTER	2012-10-26	2012-11-01	2012-11-02T11:49:24Z	1094.0	Likely Voters	Live Phone	48.0	48.0	NaN	NaN	https://elections.huffingtonpost.com/pollster/...	http://www.scribd.com/doc/111916274/UPI-CVoter...	Nonpartisan	None	NaN	1
+27	Washington Times/JZ Analytics	2012-10-29	2012-10-31	2012-11-04T06:37:30Z	800.0	Likely Voters	Live Phone	49.0	49.0	NaN	NaN	https://elections.huffingtonpost.com/pollster/...	http://www.washingtontimes.com/news/2012/nov/1...	Nonpartisan	None	NaN	1
+28	ABC/Post	2012-10-28	2012-10-31	2012-11-01T17:05:21Z	1293.0	Likely Voters	Live Phone	49.0	48.0	NaN	NaN	https://elections.huffingtonpost.com/pollster/...	http://www.washingtonpost.com/blogs/the-fix/wp...	Nonpartisan	None	NaN	1
+29	Ipsos/Reuters (Web)	2012-10-27	2012-10-31	2012-10-31T14:56:53Z	4085.0	Likely Voters	Internet	47.0	46.0	4.0	3.0	https://elections.huffingtonpost.com/pollster/...	http://big.assets.huffingtonpost.com/ipsos1031...	Nonpartisan	None	NaN	1
+...	...	...	...	...	...	...	...	...	...	...	...	...	...	...	...	...	...
+556	CNN	2010-10-27	2010-10-30	2010-11-08T12:06:30Z	921.0	Registered Voters	Live Phone	45.0	50.0	1.0	3.0	https://elections.huffingtonpost.com/pollster/...	http://politicalticker.blogs.cnn.com/2010/11/0...	Nonpartisan	None	NaN	1
+557	FOX	2010-09-28	2010-09-29	2010-11-08T12:04:22Z	900.0	Registered Voters	Live Phone	41.0	40.0	11.0	7.0	https://elections.huffingtonpost.com/pollster/...	http://www.foxnews.com/projects/pdf/100110_fox...	Nonpartisan	None	NaN	1
+558	PPP (D)	2010-09-10	2010-09-13	2010-09-17T15:16:02Z	590.0	Registered Voters	Automated Phone	46.0	43.0	11.0	NaN	https://elections.huffingtonpost.com/pollster/...	http://www.publicpolicypolling.com/pdf/PPP_Rel...	Pollster	Dem	NaN	1
+559	Politico / Penn Schoen Berland	2010-08-06	2010-08-11	2010-11-08T12:00:01Z	1668.0	Adults	Internet	42.0	33.0	24.0	NaN	https://elections.huffingtonpost.com/pollster/...	http://www.politico.com/static/PPM152_1008013_...	Sponsor	Other	NaN	1
+560	PPP (D)	2010-08-06	2010-08-09	2010-08-13T03:54:21Z	606.0	Registered Voters	Automated Phone	45.0	42.0	13.0	NaN	https://elections.huffingtonpost.com/pollster/...	http://www.publicpolicypolling.com/pdf/PPP_Rel...	Pollster	Dem	NaN	1
+561	Zogby (Internet)	2010-07-16	2010-07-19	2010-11-08T11:54:08Z	8487.0	Likely Voters	Internet	45.0	43.0	NaN	NaN	https://elections.huffingtonpost.com/pollster/...	http://politics.usnews.com/news/blogs/washingt...	Nonpartisan	None	NaN	1
+562	Politico / Penn Schoen Berland	2010-07-09	2010-07-14	2010-11-08T11:50:54Z	1011.0	Adults	Internet	39.0	35.0	26.0	NaN	https://elections.huffingtonpost.com/pollster/...	http://www.politico.com/static/PPM136_100718_p...	Sponsor	Other	NaN	1
+563	PPP (D)	2010-07-09	2010-07-12	2010-07-15T08:49:24Z	667.0	Registered Voters	Automated Phone	43.0	46.0	11.0	NaN	https://elections.huffingtonpost.com/pollster/...	http://www.publicpolicypolling.com/pdf/PPP_Rel...	Pollster	Dem	NaN	1
+564	PPP (D)	2010-06-04	2010-06-07	2010-06-10T12:17:39Z	650.0	Registered Voters	Automated Phone	45.0	42.0	13.0	NaN	https://elections.huffingtonpost.com/pollster/...	http://www.publicpolicypolling.com/pdf/PPP_Rel...	Pollster	Dem	NaN	1
+565	PPP (D)	2010-05-07	2010-05-09	2010-05-12T15:17:23Z	707.0	Registered Voters	Automated Phone	46.0	44.0	11.0	NaN	https://elections.huffingtonpost.com/pollster/...	http://www.publicpolicypolling.com/pdf/PPP_Rel...	Pollster	Dem	NaN	1
+566	CNN	2010-04-09	2010-04-11	2010-11-08T11:40:42Z	907.0	Registered Voters	Live Phone	53.0	45.0	NaN	1.0	https://elections.huffingtonpost.com/pollster/...	http://i2.cdn.turner.com/cnn/2010/images/04/13...	Nonpartisan	None	NaN	1
+567	PPP (D)	2010-04-09	2010-04-11	2010-04-15T09:22:40Z	622.0	Registered Voters	Automated Phone	44.0	45.0	10.0	NaN	https://elections.huffingtonpost.com/pollster/...	http://www.publicpolicypolling.com/pdf/PPP_Rel...	Pollster	Dem	NaN	1
+568	Clarus	2010-03-17	2010-03-20	2010-11-08T11:36:08Z	1050.0	Registered Voters	Live Phone	45.0	41.0	14.0	NaN	https://elections.huffingtonpost.com/pollster/...	http://www.clarusrg.com/sites/default/files/Cl...	Nonpartisan	None	NaN	1
+569	PPP (D)	2010-03-12	2010-03-14	2010-03-18T09:19:18Z	1403.0	Registered Voters	Automated Phone	44.0	44.0	12.0	NaN	https://elections.huffingtonpost.com/pollster/...	http://www.publicpolicypolling.com/pdf/PPP_Rel...	Pollster	Dem	NaN	1
+570	PPP (D)	2010-02-13	2010-02-15	2010-02-18T10:39:08Z	743.0	Registered Voters	Automated Phone	45.0	43.0	12.0	NaN	https://elections.huffingtonpost.com/pollster/...	http://www.publicpolicypolling.com/pdf/PPP_Rel...	Pollster	Dem	NaN	1
+571	PPP (D)	2010-01-18	2010-01-19	2010-01-22T10:41:32Z	1151.0	Registered Voters	Automated Phone	44.0	42.0	15.0	NaN	https://elections.huffingtonpost.com/pollster/...	http://www.publicpolicypolling.com/pdf/PPP_Rel...	Pollster	Dem	NaN	1
+572	FOX	2010-01-12	2010-01-13	2010-11-08T11:26:58Z	900.0	Registered Voters	Live Phone	47.0	35.0	10.0	5.0	https://elections.huffingtonpost.com/pollster/...	http://www.foxnews.com/projects/pdf/012110_pol...	Nonpartisan	None	NaN	1
+573	PPP (D)	2009-12-04	2009-12-07	2009-12-10T08:10:07Z	1253.0	Registered Voters	Automated Phone	47.0	42.0	12.0	NaN	https://elections.huffingtonpost.com/pollster/...	http://www.publicpolicypolling.com/pdf/surveys...	Pollster	Dem	NaN	1
+574	Rasmussen	2009-11-24	2009-11-24	2009-11-25T08:50:13Z	800.0	Likely Voters	Automated Phone	44.0	44.0	5.0	6.0	https://elections.huffingtonpost.com/pollster/...	http://www.rasmussenreports.com/public_content...	Nonpartisan	None	NaN	1
+575	PPP (D)	2009-11-13	2009-11-15	2009-11-20T08:45:21Z	1066.0	Registered Voters	Automated Phone	48.0	43.0	9.0	NaN	https://elections.huffingtonpost.com/pollster/...	http://www.publicpolicypolling.com/pdf/surveys...	Pollster	Dem	NaN	1
+576	PPP (D)	2009-10-16	2009-10-19	2009-10-22T08:16:05Z	766.0	Registered Voters	Automated Phone	48.0	40.0	12.0	NaN	https://elections.huffingtonpost.com/pollster/...	http://www.publicpolicypolling.com/pdf/surveys...	Pollster	Dem	NaN	1
+577	PPP (D)	2009-09-21	2009-09-21	2009-09-24T10:45:45Z	621.0	Registered Voters	Automated Phone	48.0	39.0	13.0	NaN	https://elections.huffingtonpost.com/pollster/...	http://www.publicpolicypolling.com/pdf/surveys...	Pollster	Dem	NaN	1
+578	Clarus	2009-08-14	2009-08-18	2010-11-08T11:11:21Z	1003.0	Registered Voters	Live Phone	47.0	38.0	15.0	NaN	https://elections.huffingtonpost.com/pollster/...	http://www.clarusrg.com/press_releases/2009/Ob...	Nonpartisan	None	NaN	1
+579	PPP (D)	2009-08-14	2009-08-17	2009-08-20T08:31:37Z	909.0	Registered Voters	Automated Phone	47.0	40.0	12.0	NaN	https://elections.huffingtonpost.com/pollster/...	http://www.publicpolicypolling.com/pdf/surveys...	Pollster	Dem	NaN	1
+580	Rasmussen	2009-07-18	2009-07-19	2010-11-08T11:05:08Z	1000.0	Likely Voters	Automated Phone	45.0	45.0	3.0	7.0	https://elections.huffingtonpost.com/pollster/...	http://www.rasmussenreports.com/public_content...	Nonpartisan	None	NaN	1
+581	PPP (D)	2009-07-15	2009-07-16	2010-11-08T11:02:37Z	577.0	Registered Voters	Automated Phone	49.0	40.0	11.0	NaN	https://elections.huffingtonpost.com/pollster/...	http://www.publicpolicypolling.com/pdf/surveys...	Pollster	Dem	NaN	1
+582	PPP (D)	2009-06-12	2009-06-16	2010-11-08T10:58:00Z	638.0	Registered Voters	Automated Phone	48.0	40.0	12.0	NaN	https://elections.huffingtonpost.com/pollster/...	http://www.publicpolicypolling.com/pdf/surveys...	Pollster	Dem	NaN	1
+583	PPP (D)	2009-05-14	2009-05-18	2010-11-08T10:49:08Z	1000.0	Registered Voters	Automated Phone	53.0	35.0	12.0	NaN	https://elections.huffingtonpost.com/pollster/...	http://www.publicpolicypolling.com/pdf/surveys...	Pollster	Dem	NaN	1
+584	PPP (D)	2009-04-17	2009-04-19	2010-11-08T10:45:18Z	686.0	Registered Voters	Automated Phone	50.0	39.0	11.0	NaN	https://elections.huffingtonpost.com/pollster/...	http://www.publicpolicypolling.com/pdf/surveys...	Pollster	Dem	NaN	1
+585	PPP (D)	2009-03-13	2009-03-15	2010-11-08T10:36:31Z	1403.0	Registered Voters	Automated Phone	44.0	44.0	12.0	NaN	https://elections.huffingtonpost.com/pollster/...	http://www.publicpolicypolling.com/pdf/PPP_Rel...	Pollster	Dem	NaN	1
+586 rows × 17 columns
+
+polldf.info()
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 586 entries, 0 to 585
+Data columns (total 17 columns):
+Pollster                  586 non-null object
+Start Date                586 non-null object
+End Date                  586 non-null object
+Entry Date/Time (ET)      586 non-null object
+Number of Observations    564 non-null float64
+Population                586 non-null object
+Mode                      586 non-null object
+Obama                     586 non-null float64
+Romney                    586 non-null float64
+Undecided                 423 non-null float64
+Other                     202 non-null float64
+Pollster URL              586 non-null object
+Source URL                584 non-null object
+Partisan                  586 non-null object
+Affiliation               586 non-null object
+Question Text             0 non-null float64
+Question Iteration        586 non-null int64
+dtypes: float64(6), int64(1), object(10)
+memory usage: 55.0+ KB
+sns.catplot('Mode',data=polldf)
+<seaborn.axisgrid.FacetGrid at 0x2767eb0>
+
+polldf.plot(x='End Date',y=['Obama','Romney','Undecided'])
+<matplotlib.axes._subplots.AxesSubplot at 0x10182950>
+
+polldf['Difference']=(polldf.Obama-polldf.Romney)/100
+polldf.head
+<bound method DataFrame.head of                                 Pollster  Start Date    End Date  \
+0              Politico/GWU/Battleground  2012-11-04  2012-11-05   
+1                       YouGov/Economist  2012-11-03  2012-11-05   
+2                       Gravis Marketing  2012-11-03  2012-11-05   
+3                               IBD/TIPP  2012-11-03  2012-11-05   
+4                              Rasmussen  2012-11-03  2012-11-05   
+5                   JZ Analytics/Newsmax  2012-11-03  2012-11-05   
+6                             UPI/CVOTER  2012-11-03  2012-11-05   
+7                    Ipsos/Reuters (Web)  2012-11-01  2012-11-05   
+8                                    ARG  2012-11-02  2012-11-04   
+9    PPP (D-Americans United for Change)  2012-11-02  2012-11-04   
+10                                   CNN  2012-11-02  2012-11-04   
+11                              ABC/Post  2012-11-01  2012-11-04   
+12                                Gallup  2012-11-01  2012-11-04   
+13                 DailyKos/SEIU/PPP (D)  2012-11-01  2012-11-04   
+14                              Monmouth  2012-11-01  2012-11-04   
+15                   Democracy Corps (D)  2012-11-01  2012-11-04   
+16                            Angus-Reid  2012-11-01  2012-11-03   
+17                               NBC/WSJ  2012-11-01  2012-11-03   
+18                                YouGov  2012-10-31  2012-11-03   
+19                                   Pew  2012-10-31  2012-11-03   
+20                            UPI/CVOTER  2012-11-02  2012-11-02   
+21                             Rasmussen  2012-10-31  2012-11-02   
+22                     Purple Strategies  2012-10-31  2012-11-01   
+23                  JZ Analytics/Newsmax  2012-10-30  2012-11-01   
+24   PPP (D-Americans United for Change)  2012-10-30  2012-11-01   
+25             Politico/GWU/Battleground  2012-10-29  2012-11-01   
+26                            UPI/CVOTER  2012-10-26  2012-11-01   
+27         Washington Times/JZ Analytics  2012-10-29  2012-10-31   
+28                              ABC/Post  2012-10-28  2012-10-31   
+29                   Ipsos/Reuters (Web)  2012-10-27  2012-10-31   
+..                                   ...         ...         ...   
+556                                  CNN  2010-10-27  2010-10-30   
+557                                  FOX  2010-09-28  2010-09-29   
+558                              PPP (D)  2010-09-10  2010-09-13   
+559       Politico / Penn Schoen Berland  2010-08-06  2010-08-11   
+560                              PPP (D)  2010-08-06  2010-08-09   
+561                     Zogby (Internet)  2010-07-16  2010-07-19   
+562       Politico / Penn Schoen Berland  2010-07-09  2010-07-14   
+563                              PPP (D)  2010-07-09  2010-07-12   
+564                              PPP (D)  2010-06-04  2010-06-07   
+565                              PPP (D)  2010-05-07  2010-05-09   
+566                                  CNN  2010-04-09  2010-04-11   
+567                              PPP (D)  2010-04-09  2010-04-11   
+568                               Clarus  2010-03-17  2010-03-20   
+569                              PPP (D)  2010-03-12  2010-03-14   
+570                              PPP (D)  2010-02-13  2010-02-15   
+571                              PPP (D)  2010-01-18  2010-01-19   
+572                                  FOX  2010-01-12  2010-01-13   
+573                              PPP (D)  2009-12-04  2009-12-07   
+574                            Rasmussen  2009-11-24  2009-11-24   
+575                              PPP (D)  2009-11-13  2009-11-15   
+576                              PPP (D)  2009-10-16  2009-10-19   
+577                              PPP (D)  2009-09-21  2009-09-21   
+578                               Clarus  2009-08-14  2009-08-18   
+579                              PPP (D)  2009-08-14  2009-08-17   
+580                            Rasmussen  2009-07-18  2009-07-19   
+581                              PPP (D)  2009-07-15  2009-07-16   
+582                              PPP (D)  2009-06-12  2009-06-16   
+583                              PPP (D)  2009-05-14  2009-05-18   
+584                              PPP (D)  2009-04-17  2009-04-19   
+585                              PPP (D)  2009-03-13  2009-03-15   
+
+     Entry Date/Time (ET)  Number of Observations         Population  \
+0    2012-11-06T08:40:26Z                  1000.0      Likely Voters   
+1    2012-11-26T15:31:23Z                   740.0      Likely Voters   
+2    2012-11-06T09:22:02Z                   872.0      Likely Voters   
+3    2012-11-06T08:51:48Z                   712.0      Likely Voters   
+4    2012-11-06T08:47:50Z                  1500.0      Likely Voters   
+5    2012-11-06T07:38:41Z                  1041.0      Likely Voters   
+6    2012-11-05T18:30:15Z                  3000.0      Likely Voters   
+7    2012-11-05T16:12:48Z                  4725.0      Likely Voters   
+8    2012-11-05T13:06:54Z                  1200.0      Likely Voters   
+9    2012-11-04T22:32:19Z                  1200.0      Likely Voters   
+10   2012-11-04T20:16:09Z                   693.0      Likely Voters   
+11   2012-11-05T16:56:22Z                  2345.0      Likely Voters   
+12   2012-11-05T13:48:29Z                  2551.0      Likely Voters   
+13   2012-11-05T13:31:31Z                  1300.0      Likely Voters   
+14   2012-11-05T12:52:03Z                  1417.0      Likely Voters   
+15   2012-11-05T09:41:50Z                  1080.0      Likely Voters   
+16   2012-11-06T08:47:46Z                  1019.0      Likely Voters   
+17   2012-11-04T09:12:21Z                  1475.0      Likely Voters   
+18   2012-11-04T16:24:50Z                 36472.0      Likely Voters   
+19   2012-11-04T15:46:59Z                  2709.0      Likely Voters   
+20   2012-11-03T16:40:44Z                  1074.0      Likely Voters   
+21   2012-11-03T10:54:09Z                  1500.0      Likely Voters   
+22   2012-11-02T12:31:41Z                  1000.0      Likely Voters   
+23   2012-11-02T22:57:27Z                  1030.0      Likely Voters   
+24   2012-11-02T05:46:11Z                  1200.0      Likely Voters   
+25   2012-11-04T08:42:53Z                  1000.0      Likely Voters   
+26   2012-11-02T11:49:24Z                  1094.0      Likely Voters   
+27   2012-11-04T06:37:30Z                   800.0      Likely Voters   
+28   2012-11-01T17:05:21Z                  1293.0      Likely Voters   
+29   2012-10-31T14:56:53Z                  4085.0      Likely Voters   
+..                    ...                     ...                ...   
+556  2010-11-08T12:06:30Z                   921.0  Registered Voters   
+557  2010-11-08T12:04:22Z                   900.0  Registered Voters   
+558  2010-09-17T15:16:02Z                   590.0  Registered Voters   
+559  2010-11-08T12:00:01Z                  1668.0             Adults   
+560  2010-08-13T03:54:21Z                   606.0  Registered Voters   
+561  2010-11-08T11:54:08Z                  8487.0      Likely Voters   
+562  2010-11-08T11:50:54Z                  1011.0             Adults   
+563  2010-07-15T08:49:24Z                   667.0  Registered Voters   
+564  2010-06-10T12:17:39Z                   650.0  Registered Voters   
+565  2010-05-12T15:17:23Z                   707.0  Registered Voters   
+566  2010-11-08T11:40:42Z                   907.0  Registered Voters   
+567  2010-04-15T09:22:40Z                   622.0  Registered Voters   
+568  2010-11-08T11:36:08Z                  1050.0  Registered Voters   
+569  2010-03-18T09:19:18Z                  1403.0  Registered Voters   
+570  2010-02-18T10:39:08Z                   743.0  Registered Voters   
+571  2010-01-22T10:41:32Z                  1151.0  Registered Voters   
+572  2010-11-08T11:26:58Z                   900.0  Registered Voters   
+573  2009-12-10T08:10:07Z                  1253.0  Registered Voters   
+574  2009-11-25T08:50:13Z                   800.0      Likely Voters   
+575  2009-11-20T08:45:21Z                  1066.0  Registered Voters   
+576  2009-10-22T08:16:05Z                   766.0  Registered Voters   
+577  2009-09-24T10:45:45Z                   621.0  Registered Voters   
+578  2010-11-08T11:11:21Z                  1003.0  Registered Voters   
+579  2009-08-20T08:31:37Z                   909.0  Registered Voters   
+580  2010-11-08T11:05:08Z                  1000.0      Likely Voters   
+581  2010-11-08T11:02:37Z                   577.0  Registered Voters   
+582  2010-11-08T10:58:00Z                   638.0  Registered Voters   
+583  2010-11-08T10:49:08Z                  1000.0  Registered Voters   
+584  2010-11-08T10:45:18Z                   686.0  Registered Voters   
+585  2010-11-08T10:36:31Z                  1403.0  Registered Voters   
+
+                Mode  Obama  Romney  Undecided  Other  \
+0         Live Phone   47.0    47.0        6.0    NaN   
+1           Internet   49.0    47.0        3.0    NaN   
+2    Automated Phone   48.0    48.0        4.0    NaN   
+3         Live Phone   50.0    49.0        NaN    1.0   
+4    Automated Phone   48.0    49.0        NaN    NaN   
+5           Internet   47.0    47.0        6.0    NaN   
+6         Live Phone   49.0    48.0        NaN    NaN   
+7           Internet   48.0    46.0        4.0    2.0   
+8         Live Phone   49.0    49.0        1.0    1.0   
+9    Automated Phone   50.0    48.0        3.0    NaN   
+10        Live Phone   49.0    49.0        2.0    NaN   
+11        Live Phone   50.0    47.0        1.0    1.0   
+12        Live Phone   48.0    49.0        NaN    NaN   
+13   Automated Phone   50.0    48.0        2.0    NaN   
+14    IVR/Live Phone   48.0    48.0        2.0    2.0   
+15        Live Phone   49.0    45.0        NaN    1.0   
+16          Internet   51.0    48.0        NaN    1.0   
+17        Live Phone   48.0    47.0        3.0    2.0   
+18          Internet   49.0    47.0        3.0    NaN   
+19        Live Phone   48.0    45.0        NaN    3.0   
+20        Live Phone   49.0    48.0        NaN    NaN   
+21   Automated Phone   48.0    48.0        2.0    1.0   
+22        IVR/Online   47.0    46.0        7.0    NaN   
+23          Internet   48.0    46.0        6.0    NaN   
+24   Automated Phone   49.0    48.0        3.0    NaN   
+25        Live Phone   48.0    48.0        3.0    NaN   
+26        Live Phone   48.0    48.0        NaN    NaN   
+27        Live Phone   49.0    49.0        NaN    NaN   
+28        Live Phone   49.0    48.0        NaN    NaN   
+29          Internet   47.0    46.0        4.0    3.0   
+..               ...    ...     ...        ...    ...   
+556       Live Phone   45.0    50.0        1.0    3.0   
+557       Live Phone   41.0    40.0       11.0    7.0   
+558  Automated Phone   46.0    43.0       11.0    NaN   
+559         Internet   42.0    33.0       24.0    NaN   
+560  Automated Phone   45.0    42.0       13.0    NaN   
+561         Internet   45.0    43.0        NaN    NaN   
+562         Internet   39.0    35.0       26.0    NaN   
+563  Automated Phone   43.0    46.0       11.0    NaN   
+564  Automated Phone   45.0    42.0       13.0    NaN   
+565  Automated Phone   46.0    44.0       11.0    NaN   
+566       Live Phone   53.0    45.0        NaN    1.0   
+567  Automated Phone   44.0    45.0       10.0    NaN   
+568       Live Phone   45.0    41.0       14.0    NaN   
+569  Automated Phone   44.0    44.0       12.0    NaN   
+570  Automated Phone   45.0    43.0       12.0    NaN   
+571  Automated Phone   44.0    42.0       15.0    NaN   
+572       Live Phone   47.0    35.0       10.0    5.0   
+573  Automated Phone   47.0    42.0       12.0    NaN   
+574  Automated Phone   44.0    44.0        5.0    6.0   
+575  Automated Phone   48.0    43.0        9.0    NaN   
+576  Automated Phone   48.0    40.0       12.0    NaN   
+577  Automated Phone   48.0    39.0       13.0    NaN   
+578       Live Phone   47.0    38.0       15.0    NaN   
+579  Automated Phone   47.0    40.0       12.0    NaN   
+580  Automated Phone   45.0    45.0        3.0    7.0   
+581  Automated Phone   49.0    40.0       11.0    NaN   
+582  Automated Phone   48.0    40.0       12.0    NaN   
+583  Automated Phone   53.0    35.0       12.0    NaN   
+584  Automated Phone   50.0    39.0       11.0    NaN   
+585  Automated Phone   44.0    44.0       12.0    NaN   
+
+                                          Pollster URL  \
+0    https://elections.huffingtonpost.com/pollster/...   
+1    https://elections.huffingtonpost.com/pollster/...   
+2    https://elections.huffingtonpost.com/pollster/...   
+3    https://elections.huffingtonpost.com/pollster/...   
+4    https://elections.huffingtonpost.com/pollster/...   
+5    https://elections.huffingtonpost.com/pollster/...   
+6    https://elections.huffingtonpost.com/pollster/...   
+7    https://elections.huffingtonpost.com/pollster/...   
+8    https://elections.huffingtonpost.com/pollster/...   
+9    https://elections.huffingtonpost.com/pollster/...   
+10   https://elections.huffingtonpost.com/pollster/...   
+11   https://elections.huffingtonpost.com/pollster/...   
+12   https://elections.huffingtonpost.com/pollster/...   
+13   https://elections.huffingtonpost.com/pollster/...   
+14   https://elections.huffingtonpost.com/pollster/...   
+15   https://elections.huffingtonpost.com/pollster/...   
+16   https://elections.huffingtonpost.com/pollster/...   
+17   https://elections.huffingtonpost.com/pollster/...   
+18   https://elections.huffingtonpost.com/pollster/...   
+19   https://elections.huffingtonpost.com/pollster/...   
+20   https://elections.huffingtonpost.com/pollster/...   
+21   https://elections.huffingtonpost.com/pollster/...   
+22   https://elections.huffingtonpost.com/pollster/...   
+23   https://elections.huffingtonpost.com/pollster/...   
+24   https://elections.huffingtonpost.com/pollster/...   
+25   https://elections.huffingtonpost.com/pollster/...   
+26   https://elections.huffingtonpost.com/pollster/...   
+27   https://elections.huffingtonpost.com/pollster/...   
+28   https://elections.huffingtonpost.com/pollster/...   
+29   https://elections.huffingtonpost.com/pollster/...   
+..                                                 ...   
+556  https://elections.huffingtonpost.com/pollster/...   
+557  https://elections.huffingtonpost.com/pollster/...   
+558  https://elections.huffingtonpost.com/pollster/...   
+559  https://elections.huffingtonpost.com/pollster/...   
+560  https://elections.huffingtonpost.com/pollster/...   
+561  https://elections.huffingtonpost.com/pollster/...   
+562  https://elections.huffingtonpost.com/pollster/...   
+563  https://elections.huffingtonpost.com/pollster/...   
+564  https://elections.huffingtonpost.com/pollster/...   
+565  https://elections.huffingtonpost.com/pollster/...   
+566  https://elections.huffingtonpost.com/pollster/...   
+567  https://elections.huffingtonpost.com/pollster/...   
+568  https://elections.huffingtonpost.com/pollster/...   
+569  https://elections.huffingtonpost.com/pollster/...   
+570  https://elections.huffingtonpost.com/pollster/...   
+571  https://elections.huffingtonpost.com/pollster/...   
+572  https://elections.huffingtonpost.com/pollster/...   
+573  https://elections.huffingtonpost.com/pollster/...   
+574  https://elections.huffingtonpost.com/pollster/...   
+575  https://elections.huffingtonpost.com/pollster/...   
+576  https://elections.huffingtonpost.com/pollster/...   
+577  https://elections.huffingtonpost.com/pollster/...   
+578  https://elections.huffingtonpost.com/pollster/...   
+579  https://elections.huffingtonpost.com/pollster/...   
+580  https://elections.huffingtonpost.com/pollster/...   
+581  https://elections.huffingtonpost.com/pollster/...   
+582  https://elections.huffingtonpost.com/pollster/...   
+583  https://elections.huffingtonpost.com/pollster/...   
+584  https://elections.huffingtonpost.com/pollster/...   
+585  https://elections.huffingtonpost.com/pollster/...   
+
+                                            Source URL     Partisan  \
+0    http://www.politico.com/news/stories/1112/8338...  Nonpartisan   
+1    http://cdn.yougov.com/cumulus_uploads/document...  Nonpartisan   
+2    http://www.gravispolls.com/2012/11/gravis-mark...  Nonpartisan   
+3    http://news.investors.com/special-report/50841...  Nonpartisan   
+4    http://www.rasmussenreports.com/public_content...  Nonpartisan   
+5                          http://www.jzanalytics.com/      Sponsor   
+6                                                  NaN  Nonpartisan   
+7    http://big.assets.huffingtonpost.com/ipsos1105...  Nonpartisan   
+8    http://americanresearchgroup.com/pres2012/NA12...  Nonpartisan   
+9    http://www.publicpolicypolling.com/pdf/2011/PP...      Sponsor   
+10   http://i2.cdn.turner.com/cnn/2012/images/11/04...  Nonpartisan   
+11   http://www.washingtonpost.com/blogs/the-fix/wp...  Nonpartisan   
+12   http://www.gallup.com/poll/157817/election-201...  Nonpartisan   
+13     http://www.dailykos.com/weeklypolling/2012/11/1      Sponsor   
+14   http://cms.monmouth.edu/assets/0/84/159/214748...  Nonpartisan   
+15   http://big.assets.huffingtonpost.com/demcorpst...     Pollster   
+16   http://www.angus-reid.com/polls/47681/obama-ho...  Nonpartisan   
+17   http://firstread.nbcnews.com/_news/2012/11/04/...  Nonpartisan   
+18   http://cdn.yougov.com/r/1/ygTabs_november_like...  Nonpartisan   
+19   http://www.people-press.org/2012/11/04/obama-g...  Nonpartisan   
+20                                                 NaN  Nonpartisan   
+21   http://www.rasmussenreports.com/public_content...  Nonpartisan   
+22   http://www.purplestrategies.com/wp-content/upl...  Nonpartisan   
+23                         http://www.jzanalytics.com/      Sponsor   
+24   http://www.publicpolicypolling.com/pdf/2011/PP...      Sponsor   
+25   https://mediarelations.gwu.edu/sites/mediarela...  Nonpartisan   
+26   http://www.scribd.com/doc/111916274/UPI-CVoter...  Nonpartisan   
+27   http://www.washingtontimes.com/news/2012/nov/1...  Nonpartisan   
+28   http://www.washingtonpost.com/blogs/the-fix/wp...  Nonpartisan   
+29   http://big.assets.huffingtonpost.com/ipsos1031...  Nonpartisan   
+..                                                 ...          ...   
+556  http://politicalticker.blogs.cnn.com/2010/11/0...  Nonpartisan   
+557  http://www.foxnews.com/projects/pdf/100110_fox...  Nonpartisan   
+558  http://www.publicpolicypolling.com/pdf/PPP_Rel...     Pollster   
+559  http://www.politico.com/static/PPM152_1008013_...      Sponsor   
+560  http://www.publicpolicypolling.com/pdf/PPP_Rel...     Pollster   
+561  http://politics.usnews.com/news/blogs/washingt...  Nonpartisan   
+562  http://www.politico.com/static/PPM136_100718_p...      Sponsor   
+563  http://www.publicpolicypolling.com/pdf/PPP_Rel...     Pollster   
+564  http://www.publicpolicypolling.com/pdf/PPP_Rel...     Pollster   
+565  http://www.publicpolicypolling.com/pdf/PPP_Rel...     Pollster   
+566  http://i2.cdn.turner.com/cnn/2010/images/04/13...  Nonpartisan   
+567  http://www.publicpolicypolling.com/pdf/PPP_Rel...     Pollster   
+568  http://www.clarusrg.com/sites/default/files/Cl...  Nonpartisan   
+569  http://www.publicpolicypolling.com/pdf/PPP_Rel...     Pollster   
+570  http://www.publicpolicypolling.com/pdf/PPP_Rel...     Pollster   
+571  http://www.publicpolicypolling.com/pdf/PPP_Rel...     Pollster   
+572  http://www.foxnews.com/projects/pdf/012110_pol...  Nonpartisan   
+573  http://www.publicpolicypolling.com/pdf/surveys...     Pollster   
+574  http://www.rasmussenreports.com/public_content...  Nonpartisan   
+575  http://www.publicpolicypolling.com/pdf/surveys...     Pollster   
+576  http://www.publicpolicypolling.com/pdf/surveys...     Pollster   
+577  http://www.publicpolicypolling.com/pdf/surveys...     Pollster   
+578  http://www.clarusrg.com/press_releases/2009/Ob...  Nonpartisan   
+579  http://www.publicpolicypolling.com/pdf/surveys...     Pollster   
+580  http://www.rasmussenreports.com/public_content...  Nonpartisan   
+581  http://www.publicpolicypolling.com/pdf/surveys...     Pollster   
+582  http://www.publicpolicypolling.com/pdf/surveys...     Pollster   
+583  http://www.publicpolicypolling.com/pdf/surveys...     Pollster   
+584  http://www.publicpolicypolling.com/pdf/surveys...     Pollster   
+585  http://www.publicpolicypolling.com/pdf/PPP_Rel...     Pollster   
+
+    Affiliation  Question Text  Question Iteration  Difference  
+0          None            NaN                   1        0.00  
+1          None            NaN                   1        0.02  
+2          None            NaN                   1        0.00  
+3          None            NaN                   1        0.01  
+4          None            NaN                   1       -0.01  
+5           Rep            NaN                   1        0.00  
+6          None            NaN                   1        0.01  
+7          None            NaN                   1        0.02  
+8          None            NaN                   1        0.00  
+9           Dem            NaN                   1        0.02  
+10         None            NaN                   1        0.00  
+11         None            NaN                   1        0.03  
+12         None            NaN                   1       -0.01  
+13          Dem            NaN                   1        0.02  
+14         None            NaN                   1        0.00  
+15          Dem            NaN                   1        0.04  
+16         None            NaN                   1        0.03  
+17         None            NaN                   1        0.01  
+18         None            NaN                   1        0.02  
+19         None            NaN                   1        0.03  
+20         None            NaN                   1        0.01  
+21         None            NaN                   1        0.00  
+22         None            NaN                   1        0.01  
+23          Rep            NaN                   1        0.02  
+24          Dem            NaN                   1        0.01  
+25         None            NaN                   1        0.00  
+26         None            NaN                   1        0.00  
+27         None            NaN                   1        0.00  
+28         None            NaN                   1        0.01  
+29         None            NaN                   1        0.01  
+..          ...            ...                 ...         ...  
+556        None            NaN                   1       -0.05  
+557        None            NaN                   1        0.01  
+558         Dem            NaN                   1        0.03  
+559       Other            NaN                   1        0.09  
+560         Dem            NaN                   1        0.03  
+561        None            NaN                   1        0.02  
+562       Other            NaN                   1        0.04  
+563         Dem            NaN                   1       -0.03  
+564         Dem            NaN                   1        0.03  
+565         Dem            NaN                   1        0.02  
+566        None            NaN                   1        0.08  
+567         Dem            NaN                   1       -0.01  
+568        None            NaN                   1        0.04  
+569         Dem            NaN                   1        0.00  
+570         Dem            NaN                   1        0.02  
+571         Dem            NaN                   1        0.02  
+572        None            NaN                   1        0.12  
+573         Dem            NaN                   1        0.05  
+574        None            NaN                   1        0.00  
+575         Dem            NaN                   1        0.05  
+576         Dem            NaN                   1        0.08  
+577         Dem            NaN                   1        0.09  
+578        None            NaN                   1        0.09  
+579         Dem            NaN                   1        0.07  
+580        None            NaN                   1        0.00  
+581         Dem            NaN                   1        0.09  
+582         Dem            NaN                   1        0.08  
+583         Dem            NaN                   1        0.18  
+584         Dem            NaN                   1        0.11  
+585         Dem            NaN                   1        0.00  
+
+[586 rows x 18 columns]>
+polldf['Difference'].head
+<bound method Series.head of 0      0.00
+1      0.02
+2      0.00
+3      0.01
+4     -0.01
+5      0.00
+6      0.01
+7      0.02
+8      0.00
+9      0.02
+10     0.00
+11     0.03
+12    -0.01
+13     0.02
+14     0.00
+15     0.04
+16     0.03
+17     0.01
+18     0.02
+19     0.03
+20     0.01
+21     0.00
+22     0.01
+23     0.02
+24     0.01
+25     0.00
+26     0.00
+27     0.00
+28     0.01
+29     0.01
+       ... 
+556   -0.05
+557    0.01
+558    0.03
+559    0.09
+560    0.03
+561    0.02
+562    0.04
+563   -0.03
+564    0.03
+565    0.02
+566    0.08
+567   -0.01
+568    0.04
+569    0.00
+570    0.02
+571    0.02
+572    0.12
+573    0.05
+574    0.00
+575    0.05
+576    0.08
+577    0.09
+578    0.09
+579    0.07
+580    0.00
+581    0.09
+582    0.08
+583    0.18
+584    0.11
+585    0.00
+Name: Difference, Length: 586, dtype: float64>
+polldf=polldf.groupby(['Start Date'],as_index=False).mean()
+polldf.head
+<bound method DataFrame.head of      Start Date  Number of Observations      Obama     Romney  Undecided  \
+0    2009-03-13             1403.000000  44.000000  44.000000  12.000000   
+1    2009-04-17              686.000000  50.000000  39.000000  11.000000   
+2    2009-05-14             1000.000000  53.000000  35.000000  12.000000   
+3    2009-06-12              638.000000  48.000000  40.000000  12.000000   
+4    2009-07-15              577.000000  49.000000  40.000000  11.000000   
+5    2009-07-18             1000.000000  45.000000  45.000000   3.000000   
+6    2009-08-14              956.000000  47.000000  39.000000  13.500000   
+7    2009-09-21              621.000000  48.000000  39.000000  13.000000   
+8    2009-10-16              766.000000  48.000000  40.000000  12.000000   
+9    2009-11-13             1066.000000  48.000000  43.000000   9.000000   
+10   2009-11-24              800.000000  44.000000  44.000000   5.000000   
+11   2009-12-04             1253.000000  47.000000  42.000000  12.000000   
+12   2010-01-12              900.000000  47.000000  35.000000  10.000000   
+13   2010-01-18             1151.000000  44.000000  42.000000  15.000000   
+14   2010-02-13              743.000000  45.000000  43.000000  12.000000   
+15   2010-03-12             1403.000000  44.000000  44.000000  12.000000   
+16   2010-03-17             1050.000000  45.000000  41.000000  14.000000   
+17   2010-04-09              764.500000  48.500000  45.000000  10.000000   
+18   2010-05-07              707.000000  46.000000  44.000000  11.000000   
+19   2010-06-04              650.000000  45.000000  42.000000  13.000000   
+20   2010-07-09              839.000000  41.000000  40.500000  18.500000   
+21   2010-07-16             8487.000000  45.000000  43.000000        NaN   
+22   2010-08-06             1137.000000  43.500000  37.500000  18.500000   
+23   2010-09-10              590.000000  46.000000  43.000000  11.000000   
+24   2010-09-28              900.000000  41.000000  40.000000  11.000000   
+25   2010-10-27              921.000000  45.000000  50.000000   1.000000   
+26   2010-11-08             2046.000000  42.000000  38.500000  18.500000   
+27   2010-11-19             1369.500000  42.500000  45.000000   5.000000   
+28   2010-12-03             1668.000000  40.000000  33.000000  27.000000   
+29   2010-12-09             1000.000000  47.000000  40.000000   7.000000   
+..          ...                     ...        ...        ...        ...   
+327  2012-10-04             1061.500000  45.833333  48.666667   6.000000   
+328  2012-10-05             1000.000000  46.000000  46.500000   7.000000   
+329  2012-10-06              895.000000  46.500000  45.500000   4.500000   
+330  2012-10-07             1197.333333  47.000000  47.333333   4.666667   
+331  2012-10-08             2030.000000  46.500000  48.000000   5.000000   
+332  2012-10-10             1118.000000  48.000000  47.000000   3.500000   
+333  2012-10-11             1335.250000  47.000000  46.500000   5.666667   
+334  2012-10-12             1231.500000  46.500000  47.000000   6.500000   
+335  2012-10-13             1163.000000  47.000000  47.500000   3.000000   
+336  2012-10-14             1000.000000  47.000000  49.000000   4.000000   
+337  2012-10-15             2700.000000  45.000000  51.000000        NaN   
+338  2012-10-16             1251.000000  47.000000  45.333333   6.500000   
+339  2012-10-17              935.333333  48.000000  46.666667   4.333333   
+340  2012-10-18             1084.500000  47.166667  47.333333   4.666667   
+341  2012-10-19             1180.666667  46.666667  48.000000   5.000000   
+342  2012-10-20             1132.333333  47.666667  48.000000   3.000000   
+343  2012-10-22             1364.000000  46.666667  47.000000   6.500000   
+344  2012-10-23             1100.000000  47.500000  48.000000   4.000000   
+345  2012-10-24             1386.500000  47.500000  48.000000   3.500000   
+346  2012-10-25             1075.200000  48.400000  47.800000   3.000000   
+347  2012-10-26              994.000000  48.000000  48.000000   2.000000   
+348  2012-10-27             2579.000000  46.500000  46.500000   5.500000   
+349  2012-10-28             1307.000000  47.333333  47.666667   6.000000   
+350  2012-10-29              900.000000  48.500000  48.500000   3.000000   
+351  2012-10-30             1115.000000  48.500000  47.000000   4.500000   
+352  2012-10-31            10420.250000  48.000000  46.500000   4.000000   
+353  2012-11-01             1989.000000  49.000000  47.250000   2.400000   
+354  2012-11-02             1041.750000  49.250000  48.500000   2.000000   
+355  2012-11-03             1310.833333  48.500000  48.000000   4.333333   
+356  2012-11-04             1000.000000  47.000000  47.000000   6.000000   
+
+         Other  Question Text  Question Iteration  Difference  
+0          NaN            NaN                   1    0.000000  
+1          NaN            NaN                   1    0.110000  
+2          NaN            NaN                   1    0.180000  
+3          NaN            NaN                   1    0.080000  
+4          NaN            NaN                   1    0.090000  
+5     7.000000            NaN                   1    0.000000  
+6          NaN            NaN                   1    0.080000  
+7          NaN            NaN                   1    0.090000  
+8          NaN            NaN                   1    0.080000  
+9          NaN            NaN                   1    0.050000  
+10    6.000000            NaN                   1    0.000000  
+11         NaN            NaN                   1    0.050000  
+12    5.000000            NaN                   1    0.120000  
+13         NaN            NaN                   1    0.020000  
+14         NaN            NaN                   1    0.020000  
+15         NaN            NaN                   1    0.000000  
+16         NaN            NaN                   1    0.040000  
+17    1.000000            NaN                   1    0.035000  
+18         NaN            NaN                   1    0.020000  
+19         NaN            NaN                   1    0.030000  
+20         NaN            NaN                   1    0.005000  
+21         NaN            NaN                   1    0.020000  
+22         NaN            NaN                   1    0.060000  
+23         NaN            NaN                   1    0.030000  
+24    7.000000            NaN                   1    0.010000  
+25    3.000000            NaN                   1   -0.050000  
+26    2.000000            NaN                   1    0.035000  
+27   15.000000            NaN                   1   -0.025000  
+28         NaN            NaN                   1    0.070000  
+29    6.000000            NaN                   1    0.070000  
+..         ...            ...                 ...         ...  
+327        NaN            NaN                   1   -0.028333  
+328   1.000000            NaN                   1   -0.005000  
+329   3.000000            NaN                   1    0.010000  
+330   1.500000            NaN                   1   -0.003333  
+331   2.000000            NaN                   1   -0.015000  
+332   2.000000            NaN                   1    0.010000  
+333   1.666667            NaN                   1    0.005000  
+334        NaN            NaN                   1   -0.005000  
+335        NaN            NaN                   1   -0.005000  
+336        NaN            NaN                   1   -0.020000  
+337        NaN            NaN                   1   -0.060000  
+338   2.000000            NaN                   1    0.016667  
+339   2.000000            NaN                   1    0.013333  
+340   2.000000            NaN                   1   -0.001667  
+341   2.000000            NaN                   1   -0.013333  
+342        NaN            NaN                   1   -0.003333  
+343   2.000000            NaN                   1   -0.003333  
+344   1.000000            NaN                   1   -0.005000  
+345   2.000000            NaN                   1   -0.005000  
+346   1.000000            NaN                   1    0.006000  
+347        NaN            NaN                   1    0.000000  
+348   3.000000            NaN                   1    0.000000  
+349   1.000000            NaN                   1   -0.003333  
+350        NaN            NaN                   1    0.000000  
+351        NaN            NaN                   1    0.015000  
+352   2.000000            NaN                   1    0.015000  
+353   1.500000            NaN                   1    0.017500  
+354   1.000000            NaN                   1    0.007500  
+355   1.000000            NaN                   1    0.005000  
+356        NaN            NaN                   1    0.000000  
+
+[357 rows x 9 columns]>
+polldf.plot('Start Date','Difference',figsize=(12,4),marker='o',linestyle='-')
+<matplotlib.axes._subplots.AxesSubplot at 0x1051c790>
+
+ 
+ 
+ 
+ 
